@@ -7,8 +7,6 @@
 #include "ToolMenus.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Widgets/SWindow.h"
-
-// --- NEW: Includes required to launch Editor Utility Widgets ---
 #include "EditorUtilitySubsystem.h"
 #include "EditorUtilityWidgetBlueprint.h"
 
@@ -50,19 +48,13 @@ void FProcTexPluginModule::PluginButtonClicked()
 	{
 		if (UEditorUtilitySubsystem* EditorUtilitySubsystem = GEditor->GetEditorSubsystem<UEditorUtilitySubsystem>())
 		{
-			// Spawn the tab and save a reference to the created widget
 			UEditorUtilityWidget* SpawnedWidget = EditorUtilitySubsystem->SpawnAndRegisterTab(UtilityBlueprint);
-            
 			if (SpawnedWidget)
 			{
-				// Force the Slate widget to initialize its layout in memory
 				SpawnedWidget->ForceLayoutPrepass();
-                
-				// Get the underlying C++ Slate widget
 				TSharedPtr<SWidget> SlateWidget = SpawnedWidget->GetCachedWidget();
 				if (SlateWidget.IsValid())
 				{
-					// Find the physical Editor window hosting this tab and maximize it!
 					TSharedPtr<SWindow> ParentWindow = FSlateApplication::Get().FindWidgetWindow(SlateWidget.ToSharedRef());
 					if (ParentWindow.IsValid())
 					{
